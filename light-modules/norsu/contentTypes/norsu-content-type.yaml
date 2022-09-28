@@ -1,0 +1,18 @@
+datasource:
+  $type: contentDatasource
+  workspace: field-test
+  autoCreate: true
+  
+model:
+  properties:
+    norsu.name:
+      $type: textField
+      required: true
+    foo:
+      i18n: true
+      label: foo
+      $type: richTextField
+    bar:
+      label: bar
+      $type: textField
+      required: true

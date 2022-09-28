@@ -1,0 +1,159 @@
+appClass: info.magnolia.ui.framework.app.BaseApp
+label: Norsu Content App
+icon: icon-definitions-app
+class: info.magnolia.ui.contentapp.configuration.ContentAppDescriptor
+datasource:
+  $type: contentDatasource
+subApps:
+  browser:
+    label: Grids and stuff
+    subAppClass: info.magnolia.ui.contentapp.ContentBrowserSubApp
+    class: info.magnolia.ui.contentapp.configuration.BrowserDescriptor
+    closable: false
+    workbench:
+      contentViews:
+        - name: list
+          $type: listView
+          columns:
+            - name: title
+              $type: titleColumn
+            - name: status
+              $type: statusColumn
+            - name: path
+              $type: pathColumn
+            - name: lastModified
+              $type: lastModifiedColumn
+            - name: name
+              label: name
+            - name: foo
+              label: foo
+            - name: bar
+              label: bar
+            - name: qux
+              type: java.lang.Boolean
+              label: qux
+
+        - name: tree
+          $type: treeView
+          columns:
+            - name: title
+              $type: titleColumn
+              label: hello
+            - name: name
+              label: name
+            - name: foo
+              label: foo
+    actions:
+      addItem:
+        $type: openDetailSubappAction
+        label: Add
+        icon: icon-view
+        appName: norsu-app
+        subAppName: detail
+        viewType: add
+        availability:
+          root: true
+      renameNode:
+        $type: openDialogAction
+        dialogId: norsu-ui:rename
+        label: Rename
+        icon: icon-edit
+      confirmDeletion:
+        $type: confirmationAction
+        label: Delete 🧪
+        successActionName: delete
+        icon: icon-delete
+        availability:
+          multiple: true
+          properties: true
+          writePermissionRequired: true
+      duplicate:
+        $type: duplicateAction
+        icon: icon-duplicate
+        availability:
+          properties: false
+          writePermissionRequired: true
+      move:
+        $type: moveAction
+        dialogId: norsu-ui:move
+        icon: icon-move
+      delete:
+        $type: deleteAction
+        asynchronous: true
+        availability:
+          writePermissionRequired: true
+      editNode:
+        $type: openDetailSubappAction
+        label: Edit
+        icon: icon-view
+        appName: norsu-app
+        subAppName: detail
+        viewType: edit
+      publish:
+        $type: publishAction
+        recursive: false
+        label: Publish node
+        icon: icon-publish
+        availability:
+          nodes: true
+          root: false
+          rules:
+            - $type: canPublishRule
+      publishRecursive:
+        $type: publishAction
+        label: Publish node with children
+        icon: icon-publish-incl-sub
+        availability:
+          nodes: true
+          root: false
+          rules:
+            - $type: canPublishRule
+      unpublishRecursive:
+        $type: unpublishAction
+        label: Unpublish node with children
+        icon: icon-publish-incl-sub
+        availability:
+          nodes: true
+          root: false
+          rules:
+            - $type: canUnpublishRule
+    actionbar:
+      deleteAction: confirmDeletion
+      sections:
+        nodes:
+          label: Node operations
+          groups:
+            operations:
+              items:
+                - name: addItem
+                - name: editNode
+                - name: renameNode
+                - name: confirmDeletion
+                - name: duplicate
+                - name: move
+                - name: publish
+                - name: publishRecursive
+                - name: unpublishRecursive
+          availability:
+            root: true
+
+  detail:
+    label: Edit Norsu Node
+    class: info.magnolia.ui.contentapp.detail.DetailDescriptor
+    itemProvider:
+      $type: nodeFromLocationProvider
+    form:
+      properties:
+        norsu.name:
+          $type: textField
+          required: true
+          validators:
+            - $type: contentNameValidator
+        foo:
+          i18n: true
+          label: foo
+          $type: richTextField
+        bar:
+          label: bar
+          $type: textField
+          required: true
